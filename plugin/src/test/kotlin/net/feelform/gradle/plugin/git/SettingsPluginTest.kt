@@ -7,7 +7,7 @@ import kotlin.test.assertNotNull
 /**
  * A simple unit test for the 'net.feelform.git.gradle.plugin.greeting' plugin.
  */
-class GitGradlePluginPluginTest {
+class SettingsPluginTest {
     @Test
     fun `plugin registers task`() {
         // Create a test project and apply the plugin

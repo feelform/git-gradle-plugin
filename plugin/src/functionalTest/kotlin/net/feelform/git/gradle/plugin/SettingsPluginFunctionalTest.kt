@@ -14,7 +14,7 @@ import org.junit.rules.TemporaryFolder
 /**
  * A simple functional test for the 'net.feelform.git.gradle.plugin.greeting' plugin.
  */
-class GitGradlePluginPluginFunctionalTest {
+class SettingsPluginFunctionalTest {
     @get:Rule val tempFolder = TemporaryFolder()
 
     private fun getProjectDir() = tempFolder.root
