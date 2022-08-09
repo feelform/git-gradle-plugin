@@ -59,8 +59,8 @@ testing {
 gradlePlugin {
     // Define the plugin
     val greeting by plugins.creating {
-        id = "net.feelform.gradle.plugin.git.greeting"
-        implementationClass = "net.feelform.gradle.plugin.git.GitGradlePluginPlugin"
+        id = "net.feelform.gradle.plugin.git.Settings"
+        implementationClass = "net.feelform.gradle.plugin.git.SettingsPlugin"
     }
 }
 

@@ -12,7 +12,7 @@ class SettingsPluginTest {
     fun `plugin registers task`() {
         // Create a test project and apply the plugin
         val project = ProjectBuilder.builder().build()
-        project.plugins.apply("net.feelform.gradle.plugin.git.greeting")
+        project.plugins.apply("net.feelform.gradle.plugin.git.settings")
 
         // Verify the result
         assertNotNull(project.tasks.findByName("greeting"))
