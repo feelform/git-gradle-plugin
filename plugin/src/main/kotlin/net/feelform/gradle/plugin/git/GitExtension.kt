@@ -1,5 +1,8 @@
 package net.feelform.gradle.plugin.git
 
-class GitExtension {
+import org.gradle.api.tasks.Nested
 
+abstract class GitExtension {
+    @Nested
+    abstract fun getFetch(): FetchExtension
 }
