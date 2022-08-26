@@ -1,6 +1,7 @@
 plugins {
     `java-gradle-plugin`
     id("org.jetbrains.kotlin.jvm") version "1.6.21"
+    groovy
 }
 
 repositories {
@@ -11,14 +12,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    testImplementation(platform("org.spockframework:spock-bom:2.1-groovy-3.0"))
-    testImplementation("org.spockframework:spock-core")
-
-    "integrationTestImplementation"(platform("org.spockframework:spock-bom:2.1-groovy-3.0"))
-    "integrationTestImplementation"("org.spockframework:spock-core")
-
-    "functionalTestImplementation"(platform("org.spockframework:spock-bom:2.1-groovy-3.0"))
-    "functionalTestImplementation"("org.spockframework:spock-core")
+    testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
 }
 
 testing {
@@ -35,8 +29,8 @@ testing {
             useKotlinTest()
 
             dependencies {
-                // functionalTest test suite depends on the production code in tests
                 implementation(project)
+                implementation("org.spockframework:spock-core:2.1-groovy-3.0")
             }
 
             targets {
@@ -63,3 +57,5 @@ tasks.named<Task>("check") {
     // Include functionalTest as part of the check lifecycle
     dependsOn(testing.suites.named("functionalTest"))
 }
+
+configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
