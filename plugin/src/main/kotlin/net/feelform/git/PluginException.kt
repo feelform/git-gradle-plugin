@@ -1,6 +1,6 @@
-package net.feelform.gradle.plugin.git
+package net.feelform.git
 
-class HttpCallException : RuntimeException {
+class PluginException : RuntimeException {
     constructor(message: String) : super(message)
 
     constructor(message: String, cause: Throwable) : super(message, cause)
