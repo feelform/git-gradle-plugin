@@ -1,4 +1,7 @@
 package net.feelform.git
 
-class GitExtension {
+import org.gradle.api.provider.Property
+
+abstract class GitExtension {
+    abstract val url: Property<String>
 }
