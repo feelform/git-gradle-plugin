@@ -12,35 +12,8 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
-    testImplementation("org.spockframework:spock-core:2.1-groovy-3.0")
-}
-
-testing {
-    suites {
-        // Configure the built-in test suite
-        val test by getting(JvmTestSuite::class) {
-            // Use Kotlin Test test framework
-            useKotlinTest()
-        }
-
-        // Create a new test suite
-        val functionalTest by registering(JvmTestSuite::class) {
-            // Use Kotlin Test test framework
-            useKotlinTest()
-
-            dependencies {
-                implementation(project)
-                implementation("org.spockframework:spock-core:2.1-groovy-3.0")
-            }
-
-            targets {
-                all {
-                    // This test suite should run after the built-in test suite has run its tests
-                    testTask.configure { shouldRunAfter(test) } 
-                }
-            }
-        }
-    }
+    testImplementation(platform("org.spockframework:spock-bom:2.1-groovy-3.0"))
+    testImplementation("org.spockframework:spock-core")
 }
 
 gradlePlugin {
@@ -51,11 +24,27 @@ gradlePlugin {
     }
 }
 
-gradlePlugin.testSourceSets(sourceSets["functionalTest"])
-
-tasks.named<Task>("check") {
-    // Include functionalTest as part of the check lifecycle
-    dependsOn(testing.suites.named("functionalTest"))
+// Add a source set for the functional test suite
+val functionalTestSourceSet = sourceSets.create("functionalTest") {
 }
 
 configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
+
+// Add a task to run the functional tests
+val functionalTest by tasks.registering(Test::class) {
+    testClassesDirs = functionalTestSourceSet.output.classesDirs
+    classpath = functionalTestSourceSet.runtimeClasspath
+    useJUnitPlatform()
+}
+
+gradlePlugin.testSourceSets(functionalTestSourceSet)
+
+tasks.named<Task>("check") {
+    // Run the functional tests as part of `check`
+    dependsOn(functionalTest)
+}
+
+tasks.named<Test>("test") {
+    // Use JUnit Jupiter for unit tests.
+    useJUnitPlatform()
+}
