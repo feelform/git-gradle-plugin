@@ -14,4 +14,12 @@ class HttpResponseTest extends Specification {
         httpResponse.code == OK_HTTP_CODE
         httpResponse.message == OK_HTTP_MESSAGE
     }
+
+    def "can get string representation"() {
+        when:
+        def httpResponse = new HttpResponse(OK_HTTP_CODE, OK_HTTP_MESSAGE)
+
+        then:
+        httpResponse.toString() == "HTTP $OK_HTTP_CODE, Reason: $OK_HTTP_MESSAGE"
+    }
 }
