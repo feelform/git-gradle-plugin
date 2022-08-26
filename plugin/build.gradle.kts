@@ -4,35 +4,6 @@ plugins {
     groovy
 }
 
-repositories {
-    mavenCentral()
-}
-
-// Add a source set for the functional test suite
-val functionalTestSourceSet = sourceSets.create("functionalTest") {
-}
-
-configurations["functionalTestImplementation"].extendsFrom(configurations["testImplementation"])
-
-// Add a task to run the functional tests
-val functionalTest by tasks.registering(Test::class) {
-    testClassesDirs = functionalTestSourceSet.output.classesDirs
-    classpath = functionalTestSourceSet.runtimeClasspath
-    useJUnitPlatform()
-}
-
-gradlePlugin.testSourceSets(functionalTestSourceSet)
-
-tasks.named<Task>("check") {
-    // Run the functional tests as part of `check`
-    dependsOn(functionalTest)
-}
-
-tasks.named<Test>("test") {
-    // Use JUnit Jupiter for unit tests.
-    useJUnitPlatform()
-}
-
 val integrationTest by sourceSets.creating
 
 dependencies {
@@ -50,6 +21,25 @@ tasks.check {
     dependsOn(integrationTestTask)
 }
 
+val functionalTest by sourceSets.creating
+dependencies {
+    "functionalTestImplementation"(project)
+}
+val functionalTestTask = tasks.register<Test>("functionalTest") {
+    description = "Runs the functional tests."
+    group = "verification"
+    testClassesDirs = functionalTest.output.classesDirs
+    classpath = functionalTest.runtimeClasspath
+    mustRunAfter(tasks.test, integrationTestTask)
+}
+tasks.check {
+    dependsOn(functionalTestTask)
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -59,6 +49,14 @@ dependencies {
 
     "integrationTestImplementation"(platform("org.spockframework:spock-bom:2.1-groovy-3.0"))
     "integrationTestImplementation"("org.spockframework:spock-core")
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
+}
+
+gradlePlugin {
+    testSourceSets(functionalTest)
 }
 
 gradlePlugin {
