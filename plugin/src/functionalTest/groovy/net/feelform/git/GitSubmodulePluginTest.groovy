@@ -29,12 +29,12 @@ class GitSubmodulePluginTest extends Specification {
         when:
         def result = GradleRunner.create()
                 .withProjectDir(testProjectDir)
-                .withArguments('verifyGitSourceDependency')
+                .withArguments('verifySubmodule')
                 .withPluginClasspath()
                 .build()
 
         then:
         result.output.contains("Successfully resolved URL 'https://www.google.com/'")
-        result.task(":verifyGitSourceDependency").outcome == SUCCESS
+        result.task(":verifySubmodule").outcome == SUCCESS
     }
 }

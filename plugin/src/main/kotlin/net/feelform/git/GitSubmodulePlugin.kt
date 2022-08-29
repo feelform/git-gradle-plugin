@@ -7,7 +7,7 @@ import org.gradle.api.Project
 class GitSubmodulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create("submodule", GitExtension::class.java)
-        project.tasks.register("verifyGitSourceDependency", Submodule::class.java) { task ->
+        project.tasks.register("verifySubmodule", Submodule::class.java) { task ->
             task.url.set(extension.url)
         }
     }
