@@ -64,7 +64,7 @@ gradlePlugin {
 
 gradlePlugin {
     val greeting by plugins.creating {
-        id = "net.feelform.git-source-dependency"
-        implementationClass = "net.feelform.git.GitSourceDependencyPlugin"
+        id = "net.feelform.git-submodule"
+        implementationClass = "net.feelform.git.GitSubmodulePlugin"
     }
 }

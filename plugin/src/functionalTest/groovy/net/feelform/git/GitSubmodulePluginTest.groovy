@@ -6,7 +6,7 @@ import spock.lang.TempDir
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-class GitSourceDependencyPluginTest extends Specification {
+class GitSubmodulePluginTest extends Specification {
     @TempDir File testProjectDir
     File buildFile
 
@@ -14,14 +14,14 @@ class GitSourceDependencyPluginTest extends Specification {
         buildFile = new File(testProjectDir, 'build.gradle')
         buildFile << """
             plugins {
-                id 'net.feelform.git-source-dependency'
+                id 'net.feelform.git-submodule'
             }
         """
     }
 
     def "can successfully configure git source dependency URL through extension and verify it"() {
         buildFile << """
-            git {
+            submodule {
                 url = 'https://www.google.com/'
             }
         """
