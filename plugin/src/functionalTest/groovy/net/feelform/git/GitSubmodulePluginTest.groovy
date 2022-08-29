@@ -23,6 +23,7 @@ class GitSubmodulePluginTest extends Specification {
         buildFile << """
             submodule {
                 url = 'https://www.google.com/'
+                path = 'grpc/grpc-idl'
             }
         """
 
@@ -34,7 +35,7 @@ class GitSubmodulePluginTest extends Specification {
                 .build()
 
         then:
-        result.output.contains("Successfully resolved URL 'https://www.google.com/'")
+        result.output.contains("Successfully resolved URL 'https://www.google.com/' path 'grpc/grpc-idl'")
         result.task(":updateSubmodule").outcome == SUCCESS
     }
 }

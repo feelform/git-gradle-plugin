@@ -6,9 +6,10 @@ import org.gradle.api.Project
 
 class GitSubmodulePlugin : Plugin<Project> {
     override fun apply(project: Project) {
-        val extension = project.extensions.create("submodule", GitExtension::class.java)
+        val extension = project.extensions.create("submodule", SubmoduleExtension::class.java)
         project.tasks.register("updateSubmodule", SubmoduleUpdater::class.java) { task ->
             task.url.set(extension.url)
+            task.relativePath.set(extension.path)
         }
     }
 }
