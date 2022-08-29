@@ -35,6 +35,6 @@ class GitSourceDependencyPluginTest extends Specification {
 
         then:
         result.output.contains("Successfully resolved URL 'https://www.google.com/'")
-        result.task(":verifyUrl").outcome == SUCCESS
+        result.task(":verifyGitSourceDependency").outcome == SUCCESS
     }
 }
