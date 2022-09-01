@@ -25,19 +25,25 @@ abstract class SubmoduleUpdater : DefaultTask() {
     @get:OutputDirectory
     abstract val destinationDir: DirectoryProperty
 
-    @get:Input
-    abstract val submoduleTag: Property<String>
-
     @TaskAction
     fun update() {
         val url = this.url.get()
         val path = this.destinationDir.get()
-        val submoduleTagFile = File(project.layout.projectDirectory.asFile, ".gitsubmodule")
-        writeFile(submoduleTagFile, submoduleTag.get())
+        val submoduleHashFile = File(project.layout.projectDirectory.asFile, ".gitsubmodule")
 
-        isCheckoutSubmodule(url)
+        val hash = getLatestHash(url)
+        val hashFromDestinationDir = getHashFromFile(submoduleHashFile)
 
-        logger.quiet("Successfully resolved URL '$url' path '$path' submodule file '$submoduleTagFile'")
+        if (hash != hashFromDestinationDir) {
+            if (hash != null) {
+                writeFile(submoduleHashFile, hash)
+                if (project.rootProject.layout.projectDirectory.asFile.absolutePath != project.layout.projectDirectory.asFile.absolutePath) {
+                    logger.quiet("rootProject exists ${project.rootProject.layout.projectDirectory}")
+                }
+            }
+        }
+        logger.quiet("hash '$hash' hashFromDestinationDir '$hashFromDestinationDir'")
+        logger.quiet("Successfully resolved URL '$url' path '$path' submodule file '$submoduleHashFile'")
     }
 
     @Throws(IOException::class)
@@ -51,11 +57,8 @@ abstract class SubmoduleUpdater : DefaultTask() {
         }
     }
 
-    private fun isCheckoutSubmodule(url: String): Boolean {
+    private fun getLatestHash(url: String): String? {
         val directory = project.layout.projectDirectory.asFile
-        if (!directory.isDirectory) {
-            return false
-        }
         val output = ByteArrayOutputStream()
         val result: ExecResult = getExecOperations()!!.exec(Action { spec: ExecSpec ->
             spec.commandLine("git", "ls-remote", url)
@@ -64,10 +67,20 @@ abstract class SubmoduleUpdater : DefaultTask() {
             spec.workingDir = directory
         })
         if (result.exitValue != 0) {
-            return false
+            return null
         }
         val outputString = output.toString().trim { it <= ' ' }.split("\\s+".toRegex())
-        logger.quiet(outputString[0])
-        return result.exitValue == 0 && url == outputString[0]
+        if (outputString.isEmpty()) {
+            return null
+        }
+        return outputString[0]
+    }
+
+    private fun getHashFromFile(file: File): String? {
+        if (!file.exists()) {
+            return null
+        }
+        return file.readText(Charsets.UTF_8)
+
     }
 }

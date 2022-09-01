@@ -10,7 +10,6 @@ class GitSubmodulePlugin : Plugin<Project> {
         project.tasks.register("updateSubmodule", SubmoduleUpdater::class.java) { task ->
             task.url.set(extension.url)
             task.destinationDir.set(project.layout.projectDirectory.dir(extension.path))
-            task.submoduleTag.set("1.0")
         }
     }
 }
