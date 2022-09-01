@@ -19,7 +19,7 @@ abstract class SubmoduleUpdater : DefaultTask() {
     @get:Input
     abstract val relativePath: Property<String>
 
-    @get:OutputFile
+    @get:Input
     abstract val submoduleTag: Property<String>
 
     @TaskAction
