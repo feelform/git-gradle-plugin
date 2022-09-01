@@ -39,6 +39,10 @@ abstract class SubmoduleUpdater : DefaultTask() {
                 writeFile(submoduleHashFile, hash)
                 if (project.rootProject.layout.projectDirectory.asFile.absolutePath != project.layout.projectDirectory.asFile.absolutePath) {
                     logger.quiet("rootProject exists ${project.rootProject.layout.projectDirectory}")
+                    getExecOperations()!!.exec { spec: ExecSpec ->
+                        spec.commandLine("git", "submodule", "update", "--init", "--recursive")
+                        spec.workingDir = project.rootProject.layout.projectDirectory.asFile
+                    }
                 }
             }
         }
