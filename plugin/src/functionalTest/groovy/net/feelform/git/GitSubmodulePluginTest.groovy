@@ -35,7 +35,7 @@ class GitSubmodulePluginTest extends Specification {
                 .build()
 
         then:
-        result.output.contains("Successfully resolved URL 'pinpoint-apm/pinpoint-grpc-idl' ")
+        result.output.contains("Successfully resolved URL 'https://github.com/pinpoint-apm/pinpoint-grpc-idl' ")
         result.output.contains("/grpc/grpc-idl'")
         result.task(":updateSubmodule").outcome == SUCCESS
     }
