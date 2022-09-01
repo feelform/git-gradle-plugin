@@ -20,13 +20,16 @@ abstract class SubmoduleUpdater : DefaultTask() {
     abstract val relativePath: Property<String>
 
     @get:OutputFile
-    abstract val destination: RegularFileProperty
+    abstract val submoduleTag: Property<String>
 
     @TaskAction
     fun update() {
         val url = this.url.get()
         val path = this.relativePath.get()
-        logger.quiet("Successfully resolved URL '$url' path '$path'")
+        val submoduleTagFile = project.layout.projectDirectory.asFile
+        writeFile(File(submoduleTagFile, ".gitsubmodule"), submoduleTag.get())
+
+        logger.quiet("Successfully resolved URL '$url' path '$path' submodule file '$submoduleTagFile'")
     }
 
     @Throws(IOException::class)
