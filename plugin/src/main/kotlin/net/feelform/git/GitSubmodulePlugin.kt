@@ -9,7 +9,7 @@ class GitSubmodulePlugin : Plugin<Project> {
         val extension = project.extensions.create("submodule", SubmoduleExtension::class.java)
         project.tasks.register("updateSubmodule", SubmoduleUpdater::class.java) { task ->
             task.url.set(extension.url)
-            task.relativePath.set(extension.path)
+            task.destinationDir.set(project.layout.projectDirectory.dir(extension.path))
             task.submoduleTag.set("1.0")
         }
     }

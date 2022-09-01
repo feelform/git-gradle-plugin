@@ -22,7 +22,7 @@ class GitSubmodulePluginTest extends Specification {
     def "can successfully configure git source dependency URL through extension and verify it"() {
         buildFile << """
             submodule {
-                url = 'https://www.google.com/'
+                url = 'https://github.com/pinpoint-apm/pinpoint-grpc-idl'
                 path = 'grpc/grpc-idl'
             }
         """
@@ -35,7 +35,8 @@ class GitSubmodulePluginTest extends Specification {
                 .build()
 
         then:
-        result.output.contains("Successfully resolved URL 'https://www.google.com/' path 'grpc/grpc-idl'")
+        result.output.contains("Successfully resolved URL 'pinpoint-apm/pinpoint-grpc-idl' ")
+        result.output.contains("/grpc/grpc-idl'")
         result.task(":updateSubmodule").outcome == SUCCESS
     }
 }
