@@ -22,7 +22,7 @@ class GitSubmodulePluginTest extends Specification {
     def "can successfully configure git source dependency URL through extension and verify it"() {
         buildFile << """
             submodule {
-                url = 'https://github.com/pinpoint-apm/pinpoint-grpc-idl'
+                url = 'https://github.com/feelform/git-gradle-plugin'
                 path = 'grpc/grpc-idl'
             }
         """
